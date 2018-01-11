@@ -1,172 +1,351 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<xsd:schema
-	targetNamespace="http://schemas.microsoft.com/office/2006/xmlPackage"
-	xmlns="http://schemas.microsoft.com/office/2006/xmlPackage"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" blockDefault="#all"
-	elementFormDefault="qualified" attributeFormDefault="qualified"
-	xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
-	xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc" jaxb:version="2.1">
+<?xml version="1.0" encoding="utf-8" ?>
 
-	<!-- 
-		
-		sh ~/jaxb-ri-20071219/bin/xjc.sh xmlPackage.xsd -d ~/workspace/docx4j/src/main/java/ -no-header -target 2.0
-		
-	-->
+- <edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx">
 
-	<xsd:annotation>
-		<xsd:documentation>
-			Schema for flat XML documents.
-		</xsd:documentation>
-		<xsd:appinfo>
-			<xsd:appinfo>
-				<jaxb:globalBindings></jaxb:globalBindings>
-			</xsd:appinfo>
-			<jaxb:schemaBindings>
-				<jaxb:package name="org.docx4j.xmlPackage" />
-			</jaxb:schemaBindings>
-		</xsd:appinfo>
+- <edmx:DataServices m:DataServiceVersion="1.0" m:MaxDataServiceVersion="3.0" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata">
 
-	</xsd:annotation>
+- <Schema Namespace="ReportingData" xmlns="http://schemas.microsoft.com/ado/2007/05/edm">
 
-	<xsd:element name="package" type="CT_Package" />
+- <EntityType Name="Project">
 
-	<xsd:complexType name="CT_Package">
-		<xsd:annotation>
-			<xsd:appinfo>
-				<jaxb:class name="Package" />
-			</xsd:appinfo>
-		</xsd:annotation>
-		<xsd:sequence>
-			<xsd:element name="part" type="CT_Part" minOccurs="0"
-				maxOccurs="unbounded">
-				<xsd:annotation>
-					<xsd:documentation>
-						Represents a part of a package using open
-						package conventions.
-					</xsd:documentation>
-				</xsd:annotation>
-			</xsd:element>
-		</xsd:sequence>
-	</xsd:complexType>
+- <Key>
 
-	<xsd:complexType name="CT_Part">
-		<xsd:annotation>
-			<xsd:documentation>
-				Defines a part of a package using open package
-				conventions. A part with contentType containing xml
-				requires xmlData. All other contentType values use
-				binaryData.
-			</xsd:documentation>
-			<xsd:appinfo>
-				<jaxb:class name="Part" />
-			</xsd:appinfo>
-		</xsd:annotation>
-		<xsd:choice minOccurs="1" maxOccurs="1">
-			<xsd:element name="xmlData" type="CT_XmlData">
-				<xsd:annotation>
-					<xsd:documentation>
-						Specifies the contents of a part containing XML
-						data.
-					</xsd:documentation>
-				</xsd:annotation>
-			</xsd:element>
-			<xsd:element name="binaryData" type="xsd:base64Binary">
-				<xsd:annotation>
-					<xsd:documentation>
-						Specifies the contents of a part containing
-						binary base 64 encoded non-XML data.
-					</xsd:documentation>
-				</xsd:annotation>
-			</xsd:element>
-		</xsd:choice>
-		<xsd:attribute name="name" type="xsd:string" use="required">
-			<xsd:annotation>
-				<xsd:documentation>
-					Specifies the name including the path of a part
-				</xsd:documentation>
-			</xsd:annotation>
-		</xsd:attribute>
-		<xsd:attribute name="contentType">
-			<xsd:simpleType>
-				<xsd:annotation>
-					<xsd:documentation>
-						Specifies the content type of a part
-					</xsd:documentation>
-				</xsd:annotation>
-				<xsd:restriction base="xsd:string">
-					<xsd:pattern value="text/xml" />
-					<xsd:pattern value="application/xml" />
-					<xsd:pattern value="application/.+\+xml" />
-					<xsd:pattern value=".+" />
-				</xsd:restriction>
-			</xsd:simpleType>
-		</xsd:attribute>
-		<xsd:attribute name="compression" default="deflateSuperFast"
-			use="optional">
-			<xsd:simpleType>
-				<xsd:annotation>
-					<xsd:documentation>
-						Specifies the compression type of a part
-					</xsd:documentation>
-				</xsd:annotation>
-				<xsd:restriction base="xsd:string">
-					<xsd:enumeration value="store" />
-					<xsd:enumeration value="deflateSuperFast" />
-					<xsd:enumeration value="deflateFast" />
-					<xsd:enumeration value="deflateNormal" />
-					<xsd:enumeration value="deflateMaximum" />
-				</xsd:restriction>
-			</xsd:simpleType>
-		</xsd:attribute>
-		<xsd:attribute name="padding" type="xsd:unsignedInt" default="0"
-			use="optional">
-			<xsd:annotation>
-				<xsd:documentation>
-					Specifies the default padding size in bytes of a
-					part
-				</xsd:documentation>
-			</xsd:annotation>
-		</xsd:attribute>
-	</xsd:complexType>
+  <PropertyRef Name="ProjectId" />
 
+  </Key>
 
+  <Property Name="ProjectId" Type="Edm.Guid" Nullable="false" />
 
-	<xsd:complexType name="CT_XmlData">
-		<xsd:annotation>
-			<xsd:documentation>
-				Specifies the details of an xml part.
-			</xsd:documentation>
-			<xsd:appinfo>
-				<jaxb:class name="XmlData" />
-			</xsd:appinfo>
-		</xsd:annotation>
-		<xsd:sequence>
-			<xsd:any processContents="skip" />
-		</xsd:sequence>
-		<xsd:attribute name="originalXmlEncoding" type="xsd:string"
-			default="UTF-8" use="optional">
-			<xsd:annotation>
-				<xsd:documentation>
-					Specifies the original XML encoding of an XML part
-				</xsd:documentation>
-			</xsd:annotation>
-		</xsd:attribute>
-		<xsd:attribute name="originalXmlVersion" type="xsd:string"
-			default="1.0" use="optional">
-			<xsd:annotation>
-				<xsd:documentation>
-					Specifies the original XML version of an XML part
-				</xsd:documentation>
-			</xsd:annotation>
-		</xsd:attribute>
-		<xsd:attribute name="originalXmlStandalone" type="xsd:string"
-			default="yes" use="optional">
-			<xsd:annotation>
-				<xsd:documentation>
-					Specifies the original XML standalone attribute of
-					an XML part
-				</xsd:documentation>
-			</xsd:annotation>
-		</xsd:attribute>
-	</xsd:complexType>
-</xsd:schema>
+  <Property Name="EnterpriseProjectTypeDescription" Type="Edm.String" />
+
+  <Property Name="EnterpriseProjectTypeId" Type="Edm.Guid" />
+
+  <Property Name="EnterpriseProjectTypeIsDefault" Type="Edm.Boolean" />
+
+  <Property Name="EnterpriseProjectTypeName" Type="Edm.String" />
+
+  <Property Name="OptimizerCommitDate" Type="Edm.DateTime" />
+
+  <Property Name="OptimizerDecisionAliasLookupTableId" Type="Edm.Guid" />
+
+  <Property Name="OptimizerDecisionAliasLookupTableValueId" Type="Edm.Guid" />
+
+  <Property Name="OptimizerDecisionID" Type="Edm.Byte" />
+
+  <Property Name="OptimizerDecisionName" Type="Edm.String" />
+
+  <Property Name="OptimizerSolutionName" Type="Edm.String" />
+
+  <Property Name="ParentProjectId" Type="Edm.Guid" />
+
+  <Property Name="PlannerCommitDate" Type="Edm.DateTime" />
+
+  <Property Name="PlannerDecisionAliasLookupTableId" Type="Edm.Guid" />
+
+  <Property Name="PlannerDecisionAliasLookupTableValueId" Type="Edm.Guid" />
+
+  <Property Name="PlannerDecisionID" Type="Edm.Byte" />
+
+  <Property Name="PlannerDecisionName" Type="Edm.String" />
+
+  <Property Name="PlannerEndDate" Type="Edm.DateTime" />
+
+  <Property Name="PlannerSolutionName" Type="Edm.String" />
+
+  <Property Name="PlannerStartDate" Type="Edm.DateTime" />
+
+  <Property Name="ProjectActualCost" Type="Edm.Decimal" />
+
+  <Property Name="ProjectActualDuration" Type="Edm.Decimal" />
+
+  <Property Name="ProjectActualFinishDate" Type="Edm.DateTime" />
+
+  <Property Name="ProjectActualOvertimeCost" Type="Edm.Decimal" />
+
+  <Property Name="ProjectActualOvertimeWork" Type="Edm.Decimal" />
+
+  <Property Name="ProjectActualRegularCost" Type="Edm.Decimal" />
+
+  <Property Name="ProjectActualRegularWork" Type="Edm.Decimal" />
+
+  <Property Name="ProjectActualStartDate" Type="Edm.DateTime" />
+
+  <Property Name="ProjectActualWork" Type="Edm.Decimal" />
+
+  <Property Name="ProjectACWP" Type="Edm.Decimal" />
+
+  <Property Name="ProjectAuthorName" Type="Edm.String" />
+
+  <Property Name="ProjectBCWP" Type="Edm.Decimal" />
+
+  <Property Name="ProjectBCWS" Type="Edm.Decimal" />
+
+  <Property Name="ProjectBudgetCost" Type="Edm.Decimal" />
+
+  <Property Name="ProjectBudgetWork" Type="Edm.Decimal" />
+
+  <Property Name="ProjectCalculationsAreStale" Type="Edm.Boolean" Nullable="false" />
+
+  <Property Name="ProjectCalendarDuration" Type="Edm.Int32" />
+
+  <Property Name="ProjectCategoryName" Type="Edm.String" />
+
+  <Property Name="ProjectCompanyName" Type="Edm.String" />
+
+  <Property Name="ProjectCost" Type="Edm.Decimal" />
+
+  <Property Name="ProjectCostVariance" Type="Edm.Decimal" />
+
+  <Property Name="ProjectCPI" Type="Edm.Decimal" />
+
+  <Property Name="ProjectCreatedDate" Type="Edm.DateTime" Nullable="false" />
+
+  <Property Name="ProjectCurrency" Type="Edm.String" />
+
+  <Property Name="ProjectCV" Type="Edm.Decimal" />
+
+  <Property Name="ProjectCVP" Type="Edm.Decimal" />
+
+  <Property Name="ProjectDescription" Type="Edm.String" />
+
+  <Property Name="ProjectDuration" Type="Edm.Decimal" />
+
+  <Property Name="ProjectDurationVariance" Type="Edm.Decimal" />
+
+  <Property Name="ProjectEAC" Type="Edm.Decimal" />
+
+  <Property Name="ProjectEarlyFinish" Type="Edm.DateTime" />
+
+  <Property Name="ProjectEarlyStart" Type="Edm.DateTime" />
+
+  <Property Name="ProjectEarnedValueIsStale" Type="Edm.Boolean" Nullable="false" />
+
+  <Property Name="ProjectEnterpriseFeatures" Type="Edm.Boolean" Nullable="false" />
+
+  <Property Name="ProjectFinishDate" Type="Edm.DateTime" />
+
+  <Property Name="ProjectFinishVariance" Type="Edm.Decimal" />
+
+  <Property Name="ProjectFixedCost" Type="Edm.Decimal" />
+
+  <Property Name="ProjectIdentifier" Type="Edm.String" />
+
+  <Property Name="ProjectKeywords" Type="Edm.String" />
+
+  <Property Name="ProjectLateFinish" Type="Edm.DateTime" />
+
+  <Property Name="ProjectLateStart" Type="Edm.DateTime" />
+
+  <Property Name="ProjectLastPublishedDate" Type="Edm.DateTime" />
+
+  <Property Name="ProjectManagerName" Type="Edm.String" />
+
+  <Property Name="ProjectModifiedDate" Type="Edm.DateTime" Nullable="false" />
+
+  <Property Name="ProjectName" Type="Edm.String" />
+
+  <Property Name="ProjectOvertimeCost" Type="Edm.Decimal" />
+
+  <Property Name="ProjectOvertimeWork" Type="Edm.Decimal" />
+
+  <Property Name="ProjectOwnerId" Type="Edm.Guid" Nullable="false" />
+
+  <Property Name="ProjectOwnerName" Type="Edm.String" />
+
+  <Property Name="ProjectPercentCompleted" Type="Edm.Int16" />
+
+  <Property Name="ProjectPercentWorkCompleted" Type="Edm.Int16" />
+
+  <Property Name="ProjectRegularCost" Type="Edm.Decimal" />
+
+  <Property Name="ProjectRegularWork" Type="Edm.Decimal" />
+
+  <Property Name="ProjectRemainingCost" Type="Edm.Decimal" />
+
+  <Property Name="ProjectRemainingDuration" Type="Edm.Decimal" />
+
+  <Property Name="ProjectRemainingOvertimeCost" Type="Edm.Decimal" />
+
+  <Property Name="ProjectRemainingOvertimeWork" Type="Edm.Decimal" />
+
+  <Property Name="ProjectRemainingRegularCost" Type="Edm.Decimal" />
+
+  <Property Name="ProjectRemainingRegularWork" Type="Edm.Decimal" />
+
+  <Property Name="ProjectRemainingWork" Type="Edm.Decimal" />
+
+  <Property Name="ProjectResourcePlanWork" Type="Edm.Decimal" />
+
+  <Property Name="ProjectSPI" Type="Edm.Decimal" />
+
+  <Property Name="ProjectStartDate" Type="Edm.DateTime" />
+
+  <Property Name="ProjectStartVariance" Type="Edm.Decimal" />
+
+  <Property Name="ProjectStatusDate" Type="Edm.DateTime" />
+
+  <Property Name="ProjectSubject" Type="Edm.String" />
+
+  <Property Name="ProjectSV" Type="Edm.Decimal" />
+
+  <Property Name="ProjectSVP" Type="Edm.Decimal" />
+
+  <Property Name="ProjectTCPI" Type="Edm.Decimal" />
+
+  <Property Name="ProjectTimephased" Type="Edm.String" />
+
+  <Property Name="ProjectTitle" Type="Edm.String" />
+
+  <Property Name="ProjectType" Type="Edm.Int32" Nullable="false" />
+
+  <Property Name="ProjectVAC" Type="Edm.Decimal" />
+
+  <Property Name="ProjectWork" Type="Edm.Decimal" />
+
+  <Property Name="ProjectWorkspaceInternalUrl" Type="Edm.String" />
+
+  <Property Name="ProjectWorkVariance" Type="Edm.Decimal" />
+
+  <Property Name="ResourcePlanUtilizationDate" Type="Edm.DateTime" />
+
+  <Property Name="ResourcePlanUtilizationType" Type="Edm.Int16" />
+
+  <Property Name="WorkflowCreatedDate" Type="Edm.DateTime" />
+
+  <Property Name="WorkflowError" Type="Edm.String" />
+
+  <Property Name="WorkflowErrorResponseCode" Type="Edm.Int16" />
+
+  <Property Name="WorkflowInstanceId" Type="Edm.Guid" />
+
+  <Property Name="WorkflowOwnerId" Type="Edm.Guid" />
+
+  <Property Name="WorkflowOwnerName" Type="Edm.String" />
+
+  <Property Name="ProjectDepartments" Type="Edm.String" />
+
+  <Property Name="WBSNumber" Type="Edm.String" />
+
+  <Property Name="CC" Type="Edm.String" />
+
+  <Property Name="PortfolioPotP" Type="Edm.String" />
+
+  <Property Name="Relatedprogram" Type="Edm.String" />
+
+  <Property Name="Gateapproval" Type="Edm.Boolean" />
+
+  <NavigationProperty Name="AssignmentBaselines" Relationship="ReportingData.Project_AssignmentBaselines_AssignmentBaseline_Project" ToRole="AssignmentBaseline_Project" FromRole="Project_AssignmentBaselines" />
+
+  <NavigationProperty Name="Assignments" Relationship="ReportingData.Project_Assignments_Assignment_Project" ToRole="Assignment_Project" FromRole="Project_Assignments" />
+
+  <NavigationProperty Name="Deliverables" Relationship="ReportingData.Project_Deliverables_Deliverable_Project" ToRole="Deliverable_Project" FromRole="Project_Deliverables" />
+
+  <NavigationProperty Name="Dependencies" Relationship="ReportingData.Project_Dependencies_Deliverable_DependentProjects" ToRole="Deliverable_DependentProjects" FromRole="Project_Dependencies" />
+
+  <NavigationProperty Name="Issues" Relationship="ReportingData.Project_Issues_Issue_Project" ToRole="Issue_Project" FromRole="Project_Issues" />
+
+  <NavigationProperty Name="Risks" Relationship="ReportingData.Project_Risks_Risk_Project" ToRole="Risk_Project" FromRole="Project_Risks" />
+
+  <NavigationProperty Name="StagesInfo" Relationship="ReportingData.Project_StagesInfo_ProjectWorkflowStageData_Project" ToRole="ProjectWorkflowStageData_Project" FromRole="Project_StagesInfo" />
+
+  <NavigationProperty Name="Tasks" Relationship="ReportingData.Project_Tasks_Task_Project" ToRole="Task_Project" FromRole="Project_Tasks" />
+
+  </EntityType>
+
+- <EntityType Name="ProjectBaseline">
+
+- <Key>
+
+  <PropertyRef Name="BaselineNumber" />
+
+  <PropertyRef Name="ProjectId" />
+
+  </Key>
+
+  <Property Name="ProjectId" Type="Edm.Guid" Nullable="false" />
+
+  <Property Name="BaselineNumber" Type="Edm.Int32" Nullable="false" />
+
+  <Property Name="ProjectBaselineBudgetCost" Type="Edm.Decimal" Nullable="false" />
+
+  <Property Name="ProjectBaselineBudgetWork" Type="Edm.Decimal" Nullable="false" />
+
+  <Property Name="ProjectBaselineCost" Type="Edm.Decimal" Nullable="false" />
+
+  <Property Name="ProjectBaselineDeliverableFinishDate" Type="Edm.DateTime" />
+
+  <Property Name="ProjectBaselineDeliverableStartDate" Type="Edm.DateTime" />
+
+  <Property Name="ProjectBaselineDuration" Type="Edm.Decimal" Nullable="false" />
+
+  <Property Name="ProjectBaselineDurationString" Type="Edm.String" />
+
+  <Property Name="ProjectBaselineFinishDate" Type="Edm.DateTime" />
+
+  <Property Name="ProjectBaselineFinishDateString" Type="Edm.String" />
+
+  <Property Name="ProjectBaselineFixedCost" Type="Edm.Decimal" Nullable="false" />
+
+  <Property Name="ProjectBaselineModifiedDate" Type="Edm.DateTime" Nullable="false" />
+
+  <Property Name="ProjectBaselineStartDate" Type="Edm.DateTime" />
+
+  <Property Name="ProjectBaselineStartDateString" Type="Edm.String" />
+
+  <Property Name="ProjectBaselineWork" Type="Edm.Decimal" Nullable="false" />
+
+  <Property Name="ProjectName" Type="Edm.String" />
+
+  <Property Name="TaskId" Type="Edm.Guid" Nullable="false" />
+
+  <NavigationProperty Name="Project" Relationship="ReportingData.ProjectBaseline_Project" ToRole="Project" FromRole="ProjectBaseline" />
+
+  </EntityType>
+
+- <EntityType Name="AssignmentBaseline">
+
+- <Key>
+
+  <PropertyRef Name="AssignmentId" />
+
+  <PropertyRef Name="BaselineNumber" />
+
+  <PropertyRef Name="ProjectId" />
+
+  </Key>
+
+  <Property Name="ProjectId" Type="Edm.Guid" Nullable="false" />
+
+  <Property Name="AssignmentId" Type="Edm.Guid" Nullable="false" />
+
+  <Property Name="BaselineNumber" Type="Edm.Int32" Nullable="false" />
+
+  <Property Name="AssignmentBaselineBudgetCost" Type="Edm.Decimal" Nullable="false" />
+
+  <Property Name="AssignmentBaselineBudgetMaterialWork" Type="Edm.Decimal" Nullable="false" />
+
+  <Property Name="AssignmentBaselineBudgetWork" Type="Edm.Decimal" Nullable="false" />
+
+  <Property Name="AssignmentBaselineCost" Type="Edm.Decimal" Nullable="false" />
+
+  <Property Name="AssignmentBaselineFinishDate" Type="Edm.DateTime" />
+
+  <Property Name="AssignmentBaselineMaterialWork" Type="Edm.Decimal" Nullable="false" />
+
+  <Property Name="AssignmentBaselineModifiedDate" Type="Edm.DateTime" Nullable="false" />
+
+  <Property Name="AssignmentBaselineStartDate" Type="Edm.DateTime" />
+
+  <Property Name="AssignmentBaselineWork" Type="Edm.Decimal" Nullable="false" />
+
+  <Property Name="AssignmentType" Type="Edm.Int32" Nullable="false" />
+
+  <Property Name="ProjectName" Type="Edm.String" />
+
+  <Property Name="TaskId" Type="Edm.Guid" Nullable="false" />
+
+  <Property Name="TaskName" Type="Edm.String" />
+
+  <NavigationProperty Name="Assignment" Relationship="ReportingData.AssignmentBaseline_Assignment_Assignment_Baseline" ToRole="Assignment_Baseline" FromRole="AssignmentBaseline_Assignment" />
+
+  <NavigationProperty Name="AssignmentBaselineTimephasedDataSet" Relationship
